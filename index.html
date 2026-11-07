@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scratch Day · UFPR</title>
+<meta name="description" content="Plataforma interativa da aula de Scratch: do primeiro bloco até o jogo Pong.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='8' y='22' width='84' height='64' rx='14' fill='%23855CD6'/%3E%3Crect x='30' y='14' width='22' height='12' rx='4' fill='%23855CD6'/%3E%3Ccircle cx='38' cy='52' r='8' fill='%23fff'/%3E%3Ccircle cx='62' cy='52' r='8' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Mascote original: o robô Bit (cor muda com a escolha do aluno) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="bit" viewBox="0 0 120 150">
+      <line x1="60" y1="30" x2="60" y2="12" stroke="#3b3355" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="60" cy="10" r="8" fill="#FFBF00" stroke="#3b3355" stroke-width="3"/>
+      <rect x="6" y="52" width="14" height="28" rx="6" fill="currentColor" stroke="#3b3355" stroke-width="3"/>
+      <rect x="100" y="52" width="14" height="28" rx="6" fill="currentColor" stroke="#3b3355" stroke-width="3"/>
+      <path d="M20 46 q0-18 18-18 h12 l4 5 h12 l4-5 h12 q18 0 18 18 v46 q0 14-14 14 h-52 q-14 0-14-14z" fill="currentColor" stroke="#3b3355" stroke-width="3.5"/>
+      <rect x="30" y="42" width="60" height="46" rx="13" fill="#fff" stroke="#3b3355" stroke-width="3"/>
+      <circle cx="47" cy="62" r="7.5" fill="#2a2440"/>
+      <circle cx="73" cy="62" r="7.5" fill="#2a2440"/>
+      <circle cx="49.5" cy="59.5" r="2.6" fill="#fff"/>
+      <circle cx="75.5" cy="59.5" r="2.6" fill="#fff"/>
+      <circle cx="38" cy="75" r="4.5" fill="#FF8FB1" opacity=".8"/>
+      <circle cx="82" cy="75" r="4.5" fill="#FF8FB1" opacity=".8"/>
+      <path d="M50 75 q10 9 20 0" fill="none" stroke="#2a2440" stroke-width="4" stroke-linecap="round"/>
+      <rect x="34" y="104" width="52" height="30" rx="10" fill="currentColor" stroke="#3b3355" stroke-width="3.5"/>
+      <circle cx="49" cy="119" r="5" fill="#59C059" stroke="#3b3355" stroke-width="2"/>
+      <circle cx="71" cy="119" r="5" fill="#FF6680" stroke="#3b3355" stroke-width="2"/>
+      <rect x="38" y="132" width="16" height="12" rx="5" fill="#3b3355"/>
+      <rect x="66" y="132" width="16" height="12" rx="5" fill="#3b3355"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <!-- ===== CABEÇALHO ===== -->
+  <header class="topbar">
+    <div class="brand" title="Scratch Day">
+      <svg class="brand-bit" style="color:var(--bit)"><use href="#bit"/></svg>
+      <span class="brand-name" data-cfg="evento">Scratch Day</span>
+    </div>
+    <nav class="sections" id="sections" aria-label="Partes da aula"></nav>
+    <div class="top-right">
+      <div class="badges-mini" id="badgesMini" title="Suas conquistas"></div>
+      <span class="hello" id="hello"></span>
+      <button class="icon-btn" id="fsBtn" title="Tela cheia" aria-label="Tela cheia">⛶</button>
+      <button class="icon-btn" id="menuBtn" title="Menu do professor" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+
+<!-- ================= ABERTURA ================= -->
+
+<section class="slide slide-cover" data-title="Capa" data-section="abertura">
+  <div class="cover">
+    <div class="floaty f1"></div><div class="floaty f2"></div><div class="floaty f3"></div><div class="floaty f4"></div><div class="floaty f5"></div>
+    <p class="cover-kicker">Bem-vindos ao</p>
+    <h1 class="cover-title" id="coverTitle">Scratch Day</h1>
+    <p class="cover-sub" data-cfg="subtitulo"></p>
+    <p class="cover-meta" id="coverMeta"></p>
+    <button class="go-big" data-next>
+      <span>Começar</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <p class="cover-hint">Clique na seta para começar</p>
+    <svg class="cover-bit bob" style="color:var(--bit)"><use href="#bit"/></svg>
+  </div>
+</section>
+
+<section class="slide" data-title="Boas-vindas" data-section="abertura">
+  <div class="two-col">
+    <div>
+      <p class="kicker k-purple">Boas-vindas</p>
+      <h2>Que bom que você veio! 💜</h2>
+      <p class="lead">Obrigado pela presença! Hoje de manhã você vai aprender a <b>programar</b>, ou seja, a dar ordens para o computador.</p>
+      <p class="lead">Vamos usar o <b>Scratch</b>, onde a gente programa encaixando blocos coloridos, como se fosse LEGO. E no final você vai ter criado <b>o seu próprio jogo</b>! 🎮</p>
+      <div class="card form-card">
+        <label for="nameInput" class="label">Como você se chama?</label>
+        <input id="nameInput" class="text-input" type="text" maxlength="24" placeholder="Digite seu nome" autocomplete="off">
+        <p class="label">Escolha a cor do seu robô ajudante:</p>
+        <div class="swatches" id="swatches"></div>
+      </div>
+    </div>
+    <div class="bit-hello">
+      <div class="speech" id="bitSpeech">Oi! Eu sou o <b>Bit</b>, um robô ajudante. Vou te acompanhar hoje!</div>
+      <svg class="bit-xl bob" style="color:var(--bit)"><use href="#bit"/></svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="O que vamos fazer hoje" data-section="abertura">
+  <p class="kicker k-purple">Roteiro</p>
+  <h2>O que vamos fazer hoje</h2>
+  <div class="two-col wide-left">
+    <ol class="agenda" id="agenda"></ol>
+    <div class="card goal-card">
+      <div class="goal-emoji">🏓</div>
+      <h3>Missão final</h3>
+      <p>Criar um <b>jogo de Pong</b>: uma bola que quica pela tela e uma raquete que você controla pelo teclado. Se a bola passar… <b>fim de jogo!</b></p>
+      <button class="btn btn-orange" data-next>Ver o jogo ▸</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="O jogo que você vai criar" data-section="abertura">
+  <p class="kicker k-orange">Spoiler</p>
+  <h2>Este é o jogo que você vai criar!</h2>
+  <div class="two-col wide-left">
+    <div class="pong-wrap">
+      <canvas id="pongDemo" width="480" height="360" aria-label="Demonstração do jogo Pong"></canvas>
+      <button class="btn btn-green pong-start" id="pongStart">▶ Jogar</button>
+    </div>
+    <div>
+      <div class="card">
+        <h3>Como jogar</h3>
+        <ul class="plain">
+          <li>🖱️ Mexa o <b>mouse</b> em cima do jogo, ou use as setas <kbd>←</kbd> <kbd>→</kbd></li>
+          <li>🏓 Não deixe a bola passar da raquete</li>
+          <li>⭐ Cada rebatida vale 1 ponto</li>
+        </ul>
+      </div>
+      <p class="muted small">Até o fim da aula, você vai montar esse jogo <b>sozinho</b>, bloco por bloco, no Scratch.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Nossos combinados" data-section="abertura">
+  <p class="kicker k-purple">Combinados</p>
+  <h2>Nossos combinados</h2>
+  <div class="grid-4">
+    <div class="card rule"><div class="rule-ico">✋</div><h3>Pediu ajuda? Levante a mão</h3><p>A equipe vai até você.</p></div>
+    <div class="card rule"><div class="rule-ico">➡️</div><h3>Avance junto com a turma</h3><p>Clique na seta só quando o professor pedir.</p></div>
+    <div class="card rule"><div class="rule-ico">🐛</div><h3>Errar faz parte</h3><p>Erro em programação tem até nome: <b>bug</b>. Achar e consertar é divertido!</p></div>
+    <div class="card rule"><div class="rule-ico">🤝</div><h3>Ajude o colega</h3><p>Terminou antes? Dê uma força para quem está do lado.</p></div>
+  </div>
+</section>
+
+<!-- ================= AQUECIMENTO ================= -->
+
+<section class="slide" data-title="O que é programar?" data-section="aquecimento">
+  <div class="two-col">
+    <div>
+      <p class="kicker k-pink">Aquecimento</p>
+      <h2>O que é programar?</h2>
+      <p class="lead">Programar é dar <b>instruções</b>, passo a passo, para o computador.</p>
+      <p class="lead">O computador é muito rápido, mas faz <b>exatamente</b> o que você manda: nem mais, nem menos. E na <b>ordem</b> que você mandar!</p>
+      <div class="callout">🤔 O que acontece se a gente trocar a ordem das instruções? Aperte o botão e veja.</div>
+    </div>
+    <div class="recipe card">
+      <h3>Programa: escovar os dentes 🪥</h3>
+      <ol class="recipe-steps" id="recipe">
+        <li>Pegar a escova</li>
+        <li>Colocar a pasta na escova</li>
+        <li>Escovar os dentes</li>
+        <li>Enxaguar a boca</li>
+        <li>Guardar a escova</li>
+      </ol>
+      <p class="recipe-msg" id="recipeMsg">Tudo certo! 😁</p>
+      <div class="row">
+        <button class="btn btn-pink" id="recipeShuffle">🔀 Embaralhar</button>
+        <button class="btn btn-ghost" id="recipeFix">↺ Arrumar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Programe o robô" data-section="aquecimento">
+  <p class="kicker k-pink">Aquecimento · Desafio</p>
+  <h2>Programe o robô! <span class="level-tag" id="robotLevelTag">Fase 1 de 3</span></h2>
+  <div class="robot-game">
+    <div class="robot-board-wrap">
+      <div class="robot-board" id="robotBoard"></div>
+    </div>
+    <div class="robot-side">
+      <p class="small">Leve o <b>Bit</b> até a <b>estrela</b> ⭐ sem bater nas pedras. Monte o programa e aperte <b>Executar</b>.</p>
+      <div class="robot-cmds">
+        <button class="cmd" data-cmd="up">↑ suba 1</button>
+        <button class="cmd" data-cmd="down">↓ desça 1</button>
+        <button class="cmd" data-cmd="left">← vá 1 p/ esquerda</button>
+        <button class="cmd" data-cmd="right">→ vá 1 p/ direita</button>
+      </div>
+      <div class="robot-program">
+        <div class="hat">quando ▶ for clicado</div>
+        <ol id="robotProgram"></ol>
+      </div>
+      <div class="row">
+        <button class="btn btn-green" id="robotRun">▶ Executar</button>
+        <button class="btn btn-ghost" id="robotUndo">↩ Desfazer</button>
+        <button class="btn btn-ghost" id="robotClear">🗑 Limpar</button>
+      </div>
+      <p class="robot-msg" id="robotMsg"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONHECENDO O SCRATCH ================= -->
+
+<section class="slide" data-title="O que é o Scratch?" data-section="scratch">
+  <div class="two-col">
+    <div>
+      <p class="kicker k-blue">Conhecendo o Scratch</p>
+      <h2>O que é o Scratch?</h2>
+      <ul class="facts">
+        <li><span>🧩</span><div>Uma linguagem de programação feita de <b>blocos que se encaixam</b>, sem precisar digitar código.</div></li>
+        <li><span>🎓</span><div>Criada no <b>MIT</b>, uma universidade dos Estados Unidos, especialmente para crianças e jovens.</div></li>
+        <li><span>🌎</span><div><b>Gratuita</b>, funciona no navegador e é usada por milhões de pessoas no mundo todo.</div></li>
+        <li><span>🎮</span><div>Dá para criar <b>jogos, animações, histórias e músicas</b>.</div></li>
+      </ul>
+    </div>
+    <div class="card open-card">
+      <h3>Vamos abrir o Scratch!</h3>
+      <ol class="steps">
+        <li>Clique no botão abaixo. O Scratch vai abrir em uma nova aba.</li>
+        <li>Está em inglês? Clique em <b>Settings</b> (ou no 🌐 globo) → <b>Language</b> → <b>Português Brasileiro</b>.</li>
+        <li>Volte para esta aba quando o professor pedir.</li>
+      </ol>
+      <a class="btn btn-blue btn-xl" id="openScratch" href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener">Abrir o Scratch ↗</a>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Dica: lado a lado" data-section="scratch">
+  <p class="kicker k-blue">Dica esperta</p>
+  <h2>Deixe as duas janelas lado a lado</h2>
+  <div class="two-col">
+    <div class="split-demo" aria-hidden="true">
+      <div class="win win-left"><div class="win-bar"></div><svg style="color:var(--bit)"><use href="#bit"/></svg><span>Esta aula</span></div>
+      <div class="win win-right"><div class="win-bar"></div><div class="mini-blocks"><i></i><i></i><i></i></div><span>Scratch</span></div>
+    </div>
+    <div>
+      <ol class="steps big">
+        <li>Clique nesta janela e aperte <kbd>⊞ Win</kbd> + <kbd>←</kbd>. Ela vai para a <b>metade esquerda</b> da tela.</li>
+        <li>Do lado direito, escolha a janela do <b>Scratch</b>.</li>
+        <li>Pronto! Você lê aqui e programa ali. 🙌</li>
+      </ol>
+      <p class="muted small">Prefere uma tela só? Troque de aba com <kbd>Ctrl</kbd> + <kbd>Tab</kbd>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="A tela do Scratch" data-section="scratch">
+  <p class="kicker k-blue">Interface</p>
+  <h2>A tela do Scratch <span class="h-hint">clique nos números</span></h2>
+  <div class="iface">
+    <div class="iface-img" id="ifaceImg">
+      <img src="img/interface.jpg" alt="Tela do editor do Scratch" width="1600" height="783">
+      <div class="iface-hl" id="ifaceHl"></div>
+    </div>
+    <div class="card iface-info">
+      <div class="iface-num" id="ifaceNum">1</div>
+      <h3 id="ifaceTitle"></h3>
+      <p id="ifaceText"></p>
+      <div class="row">
+        <button class="btn btn-ghost" id="ifacePrev">◂</button>
+        <button class="btn btn-blue" id="ifaceNext">Próximo ▸</button>
+      </div>
+    </div>
+  </div>
+  <p class="note">📌 O Scratch tem três abas: <b>Código</b>, <b>Fantasias</b> e <b>Sons</b>. Hoje vamos usar só <b>Código</b> e <b>Fantasias</b>.</p>
+</section>
+
+<section class="slide" data-title="Palavras do Scratch" data-section="scratch">
+  <p class="kicker k-blue">Vocabulário</p>
+  <h2>Palavras que vamos usar muito</h2>
+  <div class="grid-3">
+    <div class="card word"><div class="word-ico">🐱</div><h3>Ator</h3><p>Um personagem ou objeto do jogo. O gatinho que já vem pronto se chama <b>Sprite1</b>.</p></div>
+    <div class="card word"><div class="word-ico">🖼️</div><h3>Palco</h3><p>O quadro branco onde tudo acontece. É ali que o jogo aparece.</p></div>
+    <div class="card word"><div class="word-ico">👕</div><h3>Fantasia</h3><p>A aparência do ator. Dá para desenhar uma fantasia nova!</p></div>
+    <div class="card word"><div class="word-ico">📜</div><h3>Código (script)</h3><p>Uma pilha de blocos encaixados: são as instruções do ator.</p></div>
+    <div class="card word"><div class="word-ico"><span class="flag">⚑</span></div><h3>Bandeira verde</h3><p>Clique nela para <b>começar</b> o programa.</p></div>
+    <div class="card word"><div class="word-ico"><span class="stop">⬣</span></div><h3>Botão vermelho</h3><p>Clique nele para <b>parar</b> tudo.</p></div>
+  </div>
+</section>
+
+<!-- ================= BLOCOS ================= -->
+
+<section class="slide" data-title="Os formatos dos blocos" data-section="blocos">
+  <p class="kicker k-yellow">Os blocos</p>
+  <h2>Cada formato tem um trabalho</h2>
+  <div class="shapes">
+    <div class="card shape"><h3>🎩 Chapéu</h3><p>Fica em cima de tudo. Diz <b>quando</b> o código começa.</p><pre class="blocks">when flag clicked</pre></div>
+    <div class="card shape"><h3>🧱 Comando</h3><p>Uma <b>ação</b>. Encaixa em cima e embaixo.</p><pre class="blocks">move (10) steps</pre></div>
+    <div class="card shape"><h3>🔁 Boca (C)</h3><p><b>Abraça</b> outros blocos para repetir ou testar algo.</p><pre class="blocks">forever
+move (10) steps
+end</pre></div>
+    <div class="card shape"><h3>🔷 Pontudo</h3><p>Uma <b>pergunta</b> de sim ou não.</p><pre class="blocks">&lt;touching (borda v)?&gt;</pre></div>
+    <div class="card shape"><h3>⚪ Redondo</h3><p>Um <b>valor</b>, como um número.</p><pre class="blocks">(pick random (1) to (10))</pre></div>
+  </div>
+</section>
+
+<section class="slide" data-title="As cores dos blocos" data-section="blocos">
+  <p class="kicker k-yellow">Os blocos</p>
+  <h2>Cada cor é uma família <span class="h-hint">clique nas cores</span></h2>
+  <div class="cats">
+    <div class="cat-list" id="catList">
+      <button data-cat="movimento" style="--c:#4C97FF">Movimento</button>
+      <button data-cat="aparencia" style="--c:#9966FF">Aparência</button>
+      <button data-cat="som" style="--c:#CF63CF">Som</button>
+      <button data-cat="eventos" style="--c:#FFBF00">Eventos</button>
+      <button data-cat="controle" style="--c:#FFAB19">Controle</button>
+      <button data-cat="sensores" style="--c:#5CB1D6">Sensores</button>
+      <button data-cat="operadores" style="--c:#59C059">Operadores</button>
+      <button data-cat="variaveis" style="--c:#FF8C1A">Variáveis</button>
+    </div>
+    <div class="card cat-panels">
+      <div class="cat-panel" data-cat="movimento"><h3 style="color:#3373cc">Movimento</h3><p>Faz o ator <b>se mexer</b>: andar, girar, ir para um lugar, apontar para uma direção.</p>
+<pre class="blocks">move (10) steps
+turn cw (15) degrees
+go to x: (0) y: (0)
+point in direction (90)
+if on edge, bounce</pre></div>
+      <div class="cat-panel" data-cat="aparencia"><h3 style="color:#774dcb">Aparência</h3><p>Muda <b>como o ator aparece</b>: falar, trocar de fantasia, mudar o tamanho, sumir e aparecer.</p>
+<pre class="blocks">say [Olá!] for (2) seconds
+next costume
+set size to (50) %
+hide
+show</pre></div>
+      <div class="cat-panel" data-cat="som"><h3 style="color:#bd42bd">Som</h3><p>Toca <b>sons e músicas</b>.</p>
+<pre class="blocks">start sound (Miau v)
+play sound (Pop v) until done</pre></div>
+      <div class="cat-panel" data-cat="eventos"><h3 style="color:#cc9900">Eventos</h3><p>Dizem <b>quando</b> o código começa: ao clicar na bandeira, ao apertar uma tecla, ao clicar no ator.</p>
+<pre class="blocks">when flag clicked
+
+when [espaço v] key pressed
+
+when this sprite clicked</pre></div>
+      <div class="cat-panel" data-cat="controle"><h3 style="color:#cf8b17">Controle</h3><p>Controlam <b>o fluxo</b>: esperar, repetir, repetir para sempre, testar uma condição, parar.</p>
+<pre class="blocks">wait (1) seconds
+repeat (10)
+end
+forever
+end
+if &lt;&gt; then
+end
+stop [todos v]</pre></div>
+      <div class="cat-panel" data-cat="sensores"><h3 style="color:#2e8eb8">Sensores</h3><p>Fazem <b>perguntas</b> sobre o jogo: está tocando em algo? Uma tecla foi apertada?</p>
+<pre class="blocks">&lt;touching (borda v)?&gt;
+&lt;key (seta para direita v) pressed?&gt;
+(mouse x)</pre></div>
+      <div class="cat-panel" data-cat="operadores"><h3 style="color:#389438">Operadores</h3><p>Fazem <b>contas e comparações</b> e sorteiam números.</p>
+<pre class="blocks">((2) + (3))
+(pick random (1) to (10))
+&lt;(y position) &lt; (-150)&gt;
+&lt;&lt;&gt; and &lt;&gt;&gt;</pre></div>
+      <div class="cat-panel" data-cat="variaveis"><h3 style="color:#db6e00">Variáveis</h3><p>Guardam <b>informações</b>, como os pontos de um jogo.</p>
+<pre class="blocks">set [pontos v] to (0)
+change [pontos v] by (1)
+show variable [pontos v]</pre></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Quiz das cores" data-section="blocos">
+  <p class="kicker k-yellow">Quiz relâmpago ⚡</p>
+  <h2>De que família é este bloco?</h2>
+  <div class="quiz card" id="quiz">
+    <div class="quiz-top"><span id="quizCount">Pergunta 1 de 6</span><span id="quizScore">⭐ 0</span></div>
+    <div class="quiz-block" id="quizBlock"></div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <p class="quiz-msg" id="quizMsg"></p>
+  </div>
+</section>
+
+<!-- ================= MISSÃO 1 ================= -->
+
+<section class="slide" data-title="Missão 1: primeiro código" data-section="m1">
+  <p class="kicker k-blue">Missão 1 · Primeiro código</p>
+  <h2>Faça o gato andar e voltar na borda 🐱</h2>
+  <div class="two-col wide-left">
+    <div>
+      <p class="lead">Na aba <b>Código</b>, com o ator <b>Sprite1</b> selecionado, faça o gato andar para os lados e <b>mudar de direção</b> quando bater na borda.</p>
+      <ul class="checklist" data-badge="m1">
+        <li>Arraste <span class="chip c-events">quando ⚑ for clicado</span> (Eventos)</li>
+        <li>Encaixe embaixo um <span class="chip c-control">sempre</span> (Controle)</li>
+        <li>Dentro do <i>sempre</i>, coloque <span class="chip c-motion">mova 10 passos</span></li>
+        <li>Logo abaixo, <span class="chip c-motion">se tocar na borda, volte</span></li>
+        <li>Clique na <b>bandeira verde</b> e veja o gato andar!</li>
+      </ul>
+    </div>
+    <div>
+      <div class="timer" data-min="15"></div>
+      <div class="card tip">
+        <h3>💡 O gato ficou de cabeça para baixo?</h3>
+        <p>Antes do <i>sempre</i>, coloque:</p>
+        <pre class="blocks">set rotation style [esquerda-direita v]</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Missão 1: resposta" data-section="m1">
+  <p class="kicker k-blue">Missão 1 · Conferindo</p>
+  <h2>Uma possível resposta</h2>
+  <div class="two-col">
+    <div>
+      <div class="reveal" data-answer>
+        <button class="btn btn-blue reveal-btn">👀 Ver uma possível resposta</button>
+        <div class="reveal-body">
+<pre class="blocks">when flag clicked
+point in direction (90)
+set rotation style [esquerda-direita v]
+forever
+move (10) steps
+if on edge, bounce
+end</pre>
+        </div>
+      </div>
+      <p class="answer-locked muted">🔒 O professor vai mostrar a resposta.</p>
+    </div>
+    <div class="card">
+      <h3>Como funciona?</h3>
+      <ol class="steps">
+        <li><b>Quando a bandeira for clicada</b>, o código começa.</li>
+        <li>O gato olha para a <b>direita</b> (direção 90).</li>
+        <li>O <b>sempre</b> repete sem parar: anda 10 passos… anda 10 passos…</li>
+        <li>Se bater na borda, ele <b>vira</b> e volta.</li>
+      </ol>
+      <p class="muted small">Experimente: troque o 10 por 3 ou por 25. O que muda?</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Caça ao bug" data-section="m1">
+  <p class="kicker k-pink">Caça ao bug 🐛</p>
+  <h2>Este código tem um bug!</h2>
+  <div class="two-col">
+    <div class="card">
+      <p>Alguém montou assim, mas o gato <b>gruda na parede</b> e fica tremendo. 😵</p>
+<pre class="blocks">when flag clicked
+forever
+point in direction (-90)
+move (10) steps
+if on edge, bounce
+end</pre>
+    </div>
+    <div class="card">
+      <h3>Por que isso acontece?</h3>
+      <div class="mcq" id="bugQuiz" data-badge="bug">
+        <button data-ok="0">10 passos é rápido demais</button>
+        <button data-ok="1">O <i>aponte para a direção</i> está dentro do <i>sempre</i>: toda vez o gato volta a olhar para o mesmo lado</button>
+        <button data-ok="0">Faltou clicar na bandeira verde</button>
+      </div>
+      <p class="mcq-msg" id="bugMsg"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MISSÃO 2 ================= -->
+
+<section class="slide" data-title="Sorteios e sensores" data-section="m2">
+  <p class="kicker k-green">Missão 2 · Novos blocos</p>
+  <h2>Sorteios e sensores 🎲</h2>
+  <div class="two-col">
+    <div>
+      <div class="concept"><span class="dot" style="--c:#59C059"></span><div><b>Operadores</b> fazem contas e sorteiam números. O bloco <i>número aleatório</i> é como jogar um dado!</div></div>
+      <pre class="blocks">(pick random (-75) to (75))</pre>
+      <div class="concept"><span class="dot" style="--c:#5CB1D6"></span><div><b>Sensores</b> fazem perguntas de sim ou não. “Estou tocando na borda?”</div></div>
+      <pre class="blocks">&lt;touching (borda v)?&gt;</pre>
+      <div class="concept"><span class="dot" style="--c:#FFAB19"></span><div><b>Se … então</b> só faz o que está dentro dele se a resposta for <b>sim</b>.</div></div>
+      <pre class="blocks">if &lt;touching (borda v)?&gt; then
+point in direction (pick random (-180) to (180))
+end</pre>
+    </div>
+    <div class="card dial-card">
+      <h3>As direções no Scratch</h3>
+      <svg class="dial" id="dial" viewBox="-130 -130 260 260" aria-label="Bússola de direções">
+        <circle r="100" fill="#f4f0ff" stroke="#855CD6" stroke-width="4"/>
+        <line x1="0" y1="-100" x2="0" y2="100" stroke="#d9d0f5" stroke-width="2"/>
+        <line x1="-100" y1="0" x2="100" y2="0" stroke="#d9d0f5" stroke-width="2"/>
+        <path id="dialRange" fill="#59C05933"/>
+        <text x="0" y="-108" text-anchor="middle">0 ↑</text>
+        <text x="112" y="5" text-anchor="start">90</text>
+        <text x="0" y="122" text-anchor="middle">180</text>
+        <text x="-112" y="5" text-anchor="end">-90</text>
+        <g id="dialArrow"><line x1="0" y1="0" x2="0" y2="-78" stroke="#FF6680" stroke-width="8" stroke-linecap="round"/><path d="M0 -96 L-14 -72 L14 -72Z" fill="#FF6680"/><circle r="9" fill="#3b3355"/></g>
+      </svg>
+      <p class="dial-out">Direção sorteada: <b id="dialValue">90</b></p>
+      <button class="btn btn-green" id="dialRoll">🎲 Sortear entre -75 e 75</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Missão 2: direção aleatória" data-section="m2">
+  <p class="kicker k-green">Missão 2 · Sorteios e sensores</p>
+  <h2>O gato escolhe para onde ir 🎲</h2>
+  <div class="two-col wide-left">
+    <div>
+      <p class="lead">Atualize o seu código para o gato escolher uma <b>direção aleatória</b> quando começar e também quando <b>tocar na borda</b>.</p>
+      <ul class="checklist" data-badge="m2">
+        <li>Troque o 90 do <span class="chip c-motion">aponte para a direção</span> por um <span class="chip c-ops">número aleatório entre -75 e 75</span></li>
+        <li>Dentro do <i>sempre</i>, coloque um <span class="chip c-control">se … então</span></li>
+        <li>No buraco pontudo do <i>se</i>, encaixe <span class="chip c-sensing">tocando em borda?</span></li>
+        <li>Dentro do <i>se</i>, faça o gato apontar para uma direção aleatória</li>
+        <li>Clique na bandeira várias vezes. Cada vez é diferente?</li>
+      </ul>
+    </div>
+    <div>
+      <div class="timer" data-min="15"></div>
+      <div class="reveal" data-answer>
+        <button class="btn btn-green reveal-btn">👀 Ver uma possível resposta</button>
+        <div class="reveal-body">
+          <div class="tabs"><button class="on" data-tab="0">Blocos</button><button data-tab="1">No Scratch</button></div>
+          <div class="tab-pane on">
+<pre class="blocks">when flag clicked
+point in direction (pick random (-75) to (75))
+forever
+move (10) steps
+if &lt;touching (borda v)?&gt; then
+point in direction (pick random (-180) to (180))
+end
+if on edge, bounce
+end</pre>
+          </div>
+          <div class="tab-pane"><img class="shot" src="img/missao2-resposta.jpg" alt="Resposta da missão 2 no Scratch" loading="lazy"></div>
+        </div>
+      </div>
+      <p class="answer-locked muted">🔒 O professor vai mostrar a resposta.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-break" data-title="Intervalo" data-section="m2" id="breakSlide">
+  <div class="break">
+    <div class="break-emoji">🍪🧃</div>
+    <h2>Hora do intervalo!</h2>
+    <p class="lead">Estique as pernas, beba água e volte quando o relógio zerar.</p>
+    <div class="timer timer-xl" id="breakTimer" data-min="10"></div>
+    <p class="muted">Na volta: vamos criar o <b>jogo Pong</b>! 🏓</p>
+  </div>
+</section>
+
+<!-- ================= MISSÃO 3: PONG ================= -->
+
+<section class="slide" data-title="Missão 3: o Pong" data-section="pong">
+  <p class="kicker k-orange">Missão 3 · Jogo Pong</p>
+  <h2>Hora de criar um jogo! 🏓</h2>
+  <div class="two-col">
+    <div class="pong-diagram card" aria-hidden="true">
+      <svg viewBox="0 0 480 360">
+        <rect x="2" y="2" width="476" height="356" rx="12" fill="#fff" stroke="#d9d0f5" stroke-width="4"/>
+        <path d="M120 250 L240 110 L360 230" fill="none" stroke="#bbb" stroke-width="3" stroke-dasharray="8 8"/>
+        <circle cx="240" cy="110" r="16" fill="#222"/>
+        <rect x="290" y="300" width="110" height="16" rx="4" fill="#e3242b"/>
+        <text x="258" y="98" class="dg">Bola</text>
+        <text x="300" y="290" class="dg">Raquete</text>
+        <text x="16" y="345" class="dg red">Se a bola passar daqui… fim de jogo!</text>
+        <line x1="10" y1="330" x2="470" y2="330" stroke="#FF6680" stroke-width="3" stroke-dasharray="6 6"/>
+      </svg>
+    </div>
+    <div>
+      <p class="lead">A bola anda em <b>direções aleatórias</b> e quica nas paredes. Você controla a <b>raquete</b> com as setas e precisa rebater. Se a bola passar… <b>fim de jogo!</b></p>
+      <ol class="roadmap">
+        <li><span>1</span><div>Desenhar a raquete e a bola</div></li>
+        <li><span>2</span><div>Programar a raquete</div></li>
+        <li><span>3</span><div>Programar a bola</div></li>
+        <li><span>4</span><div>Fim de jogo</div></li>
+      </ol>
+      <div class="timer" data-min="30"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Pong 1: desenhar os atores" data-section="pong">
+  <p class="kicker k-orange">Pong · Etapa 1 de 4</p>
+  <h2>Desenhe a raquete e a bola ✏️</h2>
+  <div class="two-col wide-left">
+    <div>
+      <ul class="checklist" data-badge="pong1">
+        <li>Passe o mouse no botão <b>Escolha um ator</b> (canto de baixo, à direita) e clique no <b>pincel 🖌️ Pintar</b></li>
+        <li>Na aba <b>Fantasias</b>, use o <b>retângulo ▭</b> para desenhar uma raquete fininha e comprida. Escolha uma cor em <b>Preencher</b></li>
+        <li>No campo <b>Ator</b>, troque o nome para <b>Raquete</b></li>
+        <li>Pinte outro ator e use o <b>círculo ◯</b> para desenhar a <b>Bola</b></li>
+        <li>Troque o nome desse ator para <b>Bola</b></li>
+      </ul>
+      <p class="muted small">Quer deixar só a raquete e a bola? Clique no gato e na lixeira 🗑️ para apagá-lo.</p>
+    </div>
+    <figure class="shot-fig"><img class="shot" src="img/fantasias.jpg" alt="Aba Fantasias do Scratch com uma bola desenhada" loading="lazy"><figcaption>Aba Fantasias: a bola desenhada com o círculo</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide" data-title="Pong 2: a raquete" data-section="pong">
+  <p class="kicker k-orange">Pong · Etapa 2 de 4</p>
+  <h2>Programe a raquete ⬅️➡️</h2>
+  <div class="two-col">
+    <div>
+      <p class="lead">Clique no ator <b>Raquete</b>. Ela deve começar <b>embaixo</b> e andar quando você apertar as setas.</p>
+      <ul class="checklist" data-badge="pong2">
+        <li>Comece com <span class="chip c-events">quando ⚑ for clicado</span></li>
+        <li>Coloque <span class="chip c-motion">vá para x: 0 y: -140</span>, que é a parte de baixo do palco</li>
+        <li>Dentro de um <span class="chip c-control">sempre</span>, use <span class="chip c-control">se … então</span> com <span class="chip c-sensing">tecla seta para direita pressionada?</span></li>
+        <li>Dentro do <i>se</i>, coloque <span class="chip c-motion">adicione 10 a x</span></li>
+        <li>Faça o mesmo para a <b>seta para esquerda</b>, com <b>-10</b></li>
+      </ul>
+    </div>
+    <div class="card code-card">
+      <h3>Código da raquete</h3>
+<pre class="blocks">when flag clicked
+go to x: (0) y: (-140)
+forever
+if &lt;key (seta para direita v) pressed?&gt; then
+change x by (10)
+end
+if &lt;key (seta para esquerda v) pressed?&gt; then
+change x by (-10)
+end
+end</pre>
+      <p class="muted small">💡 <b>x</b> é a posição de um lado para o outro e <b>y</b> é a posição de cima para baixo. O meio do palco é x: 0, y: 0.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Pong 3: a bola" data-section="pong">
+  <p class="kicker k-orange">Pong · Etapa 3 de 4</p>
+  <h2>Programe a bola ⚫</h2>
+  <div class="two-col">
+    <div>
+      <p class="lead">Clique no ator <b>Bola</b>. Ela usa o que você aprendeu nas missões 1 e 2!</p>
+      <ul class="checklist" data-badge="pong3">
+        <li>Quando a bandeira for clicada, a bola vai para <b>x: 0 y: 100</b></li>
+        <li>Aponta para uma direção aleatória entre <b>-60 e 60</b></li>
+        <li>Para <i>sempre</i>: <b>mova 10 passos</b> e <b>se tocar na borda, volte</b></li>
+        <li><b>Se</b> estiver <span class="chip c-sensing">tocando em Raquete?</span>, aponta para uma direção aleatória para cima</li>
+        <li>Clique na bandeira e tente rebater!</li>
+      </ul>
+    </div>
+    <div class="card code-card">
+      <h3>Código da bola (parte 1)</h3>
+<pre class="blocks">when flag clicked
+go to x: (0) y: (100)
+point in direction (pick random (-60) to (60))
+forever
+move (10) steps
+if on edge, bounce
+if &lt;touching (Raquete v)?&gt; then
+point in direction (pick random (-60) to (60))
+end
+end</pre>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Pong 4: fim de jogo" data-section="pong">
+  <p class="kicker k-orange">Pong · Etapa 4 de 4</p>
+  <h2>Fim de jogo! 🛑</h2>
+  <div class="two-col">
+    <div>
+      <p class="lead">Se a bola passar da raquete, ela chega lá embaixo, onde o <b>y</b> é bem pequeno. Aí o jogo acaba!</p>
+      <ul class="checklist" data-badge="pong">
+        <li>Dentro do <i>sempre</i> da bola, logo depois do <b>mova</b>, coloque um <span class="chip c-control">se … então</span></li>
+        <li>Encaixe <span class="chip c-ops">posição y &lt; -150</span>, usando o <i>&lt;</i> dos Operadores e a <i>posição y</i> do Movimento</li>
+        <li>Dentro do <i>se</i>: <span class="chip c-looks">diga Fim de jogo! por 2 segundos</span></li>
+        <li>E depois: <span class="chip c-control">pare todos</span></li>
+        <li>Jogue! Você conseguiu fazer um jogo! 🎉</li>
+      </ul>
+      <p class="muted small">⚠️ O <i>se</i> do fim de jogo precisa vir <b>antes</b> do “se tocar na borda, volte”. Senão a bola quica no chão e o jogo nunca acaba!</p>
+    </div>
+    <div>
+      <div class="reveal" data-answer>
+        <button class="btn btn-orange reveal-btn">👀 Ver o código completo da bola</button>
+        <div class="reveal-body">
+          <div class="tabs"><button class="on" data-tab="0">Blocos</button><button data-tab="1">Bola no Scratch</button><button data-tab="2">Raquete no Scratch</button></div>
+          <div class="tab-pane on">
+<pre class="blocks">when flag clicked
+go to x: (0) y: (100)
+point in direction (pick random (-60) to (60))
+forever
+move (10) steps
+if &lt;(y position) &lt; (-150)&gt; then
+say [Fim de jogo!] for (2) seconds
+stop [todos v]
+end
+if on edge, bounce
+if &lt;touching (Raquete v)?&gt; then
+point in direction (pick random (-60) to (60))
+end
+end</pre>
+          </div>
+          <div class="tab-pane"><img class="shot" src="img/pong-bola.jpg" alt="Código da bola no Scratch" loading="lazy"></div>
+          <div class="tab-pane"><img class="shot" src="img/pong-raquete.jpg" alt="Código da raquete no Scratch" loading="lazy"></div>
+        </div>
+      </div>
+      <p class="answer-locked muted">🔒 O professor vai mostrar a resposta.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Deu problema?" data-section="pong">
+  <p class="kicker k-pink">Socorro! 🆘</p>
+  <h2>Deu problema? Confira aqui</h2>
+  <div class="faq">
+    <details class="card"><summary>😶 Cliquei na bandeira e nada acontece</summary><p>Confira se o código começa com <b>quando ⚑ for clicado</b> e se ele está no <b>ator certo</b>. Clique no ator embaixo do palco para ver o código dele.</p></details>
+    <details class="card"><summary>👻 A bola atravessa a raquete</summary><p>No bloco <b>tocando em … ?</b>, o nome tem que ser <b>Raquete</b>. Escolha na setinha ▾ do bloco.</p></details>
+    <details class="card"><summary>🏃 A raquete sai da tela</summary><p>Coloque <b>se tocar na borda, volte</b> dentro do <i>sempre</i> da raquete.</p></details>
+    <details class="card"><summary>🔄 A raquete fica de cabeça para baixo</summary><p>Antes do <i>sempre</i>, use <b>defina o estilo de rotação para não rotacionar</b>.</p></details>
+    <details class="card"><summary>🐢 A bola está muito lenta ou muito rápida</summary><p>Mude o número do <b>mova 10 passos</b>: maior é mais rápido, menor é mais lento.</p></details>
+    <details class="card"><summary>♾️ O jogo nunca acaba</summary><p>O <b>se posição y &lt; -150</b> precisa estar <b>antes</b> do <b>se tocar na borda, volte</b>. Se a bola for muito grande, troque -150 por -130.</p></details>
+    <details class="card"><summary>🐘 A raquete ou a bola ficou enorme</summary><p>Use <b>defina o tamanho como 50%</b> (Aparência) ou mude o <b>Tamanho</b> embaixo do palco.</p></details>
+  </div>
+</section>
+
+<section class="slide" data-title="Desafios extras" data-section="pong">
+  <p class="kicker k-orange">Terminou? Turbine seu jogo! 🚀</p>
+  <h2>Desafios extras</h2>
+  <div class="challenges" id="challenges">
+    <div class="card chal">
+      <div class="chal-top"><span class="stars">⭐</span><h3>Placar</h3></div>
+      <p>Crie uma variável <b>pontos</b> (em Variáveis). Ela começa em 0 e ganha 1 a cada rebatida.</p>
+      <details><summary>Ver dica</summary>
+<pre class="blocks">set [pontos v] to (0)
+if &lt;touching (Raquete v)?&gt; then
+change [pontos v] by (1)
+end</pre></details>
+      <label class="done"><input type="checkbox" data-chal="placar"> Consegui!</label>
+    </div>
+    <div class="card chal">
+      <div class="chal-top"><span class="stars">⭐</span><h3>Barulhinho</h3></div>
+      <p>Toque um som cada vez que a bola bater na raquete. Na aba <b>Sons</b> dá para escolher outros!</p>
+      <details><summary>Ver dica</summary>
+<pre class="blocks">if &lt;touching (Raquete v)?&gt; then
+start sound (Pop v)
+end</pre></details>
+      <label class="done"><input type="checkbox" data-chal="som"> Consegui!</label>
+    </div>
+    <div class="card chal">
+      <div class="chal-top"><span class="stars">⭐⭐</span><h3>Cada vez mais rápido</h3></div>
+      <p>Crie a variável <b>velocidade</b>. A bola anda <i>velocidade</i> passos, e a cada rebatida a velocidade sobe.</p>
+      <details><summary>Ver dica</summary>
+<pre class="blocks">set [velocidade v] to (8)
+move (velocidade) steps
+change [velocidade v] by (1)</pre></details>
+      <label class="done"><input type="checkbox" data-chal="vel"> Consegui!</label>
+    </div>
+    <div class="card chal">
+      <div class="chal-top"><span class="stars">⭐⭐</span><h3>Bola arco-íris</h3></div>
+      <p>Faça a bola mudar de cor a cada rebatida e escolha um <b>cenário</b> bonito para o palco.</p>
+      <details><summary>Ver dica</summary>
+<pre class="blocks">change [cor v] effect by (25)</pre></details>
+      <label class="done"><input type="checkbox" data-chal="cor"> Consegui!</label>
+    </div>
+    <div class="card chal">
+      <div class="chal-top"><span class="stars">⭐⭐⭐</span><h3>3 vidas</h3></div>
+      <p>Em vez de acabar logo, a bola volta para cima e você perde uma vida. Com 0 vidas, fim de jogo!</p>
+      <details><summary>Ver dica</summary>
+<pre class="blocks">if &lt;(y position) &lt; (-150)&gt; then
+change [vidas v] by (-1)
+go to x: (0) y: (100)
+end
+if &lt;(vidas) = (0)&gt; then
+stop [todos v]
+end</pre></details>
+      <label class="done"><input type="checkbox" data-chal="vidas"> Consegui!</label>
+    </div>
+    <div class="card chal">
+      <div class="chal-top"><span class="stars">⭐⭐⭐</span><h3>Dois jogadores</h3></div>
+      <p>Crie uma segunda raquete lá em cima, controlada pelas teclas <kbd>A</kbd> e <kbd>D</kbd>. Agora é você contra um amigo!</p>
+      <details><summary>Ver dica</summary>
+<pre class="blocks">go to x: (0) y: (150)
+if &lt;key (a v) pressed?&gt; then
+change x by (-10)
+end</pre></details>
+      <label class="done"><input type="checkbox" data-chal="dois"> Consegui!</label>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL ================= -->
+
+<section class="slide" data-title="Salve seu jogo" data-section="final">
+  <div class="two-col">
+    <div>
+      <p class="kicker k-purple">Antes de ir embora</p>
+      <h2>Salve o seu jogo! 💾</h2>
+      <ol class="steps big">
+        <li>Lá em cima no Scratch, clique em <b>Arquivo</b></li>
+        <li>Clique em <b>Baixar para o seu computador</b></li>
+        <li>Vai ser salvo um arquivo terminado em <b>.sb3</b>. Esse é o seu jogo!</li>
+      </ol>
+      <p class="muted small">Peça para a equipe ajudar a mandar o arquivo para o seu e-mail ou o de um responsável.</p>
+    </div>
+    <div class="card">
+      <h3>🏠 Continue em casa</h3>
+      <ul class="plain">
+        <li>O Scratch é <b>gratuito</b>: é só entrar em <b>scratch.mit.edu</b></li>
+        <li>Com a ajuda de um adulto, crie uma conta para guardar seus projetos</li>
+        <li>Para abrir o seu jogo: <b>Arquivo → Carregar do seu computador</b></li>
+        <li>Clique em <b>Tutoriais</b> no Scratch para aprender coisas novas</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide slide-cert" data-title="Certificado" data-section="final">
+  <div class="cert" id="cert">
+    <div class="cert-ribbon">🏆</div>
+    <p class="cert-kicker">Certificado de</p>
+    <h2 class="cert-title">Programador(a) Scratch</h2>
+    <p class="cert-text">Certificamos que</p>
+    <p class="cert-name" id="certName">Você</p>
+    <p class="cert-text">criou o seu próprio jogo no <b data-cfg="evento">Scratch Day</b>.</p>
+    <div class="cert-badges" id="certBadges"></div>
+    <p class="cert-meta" id="certMeta"></p>
+    <svg class="cert-bit bob" style="color:var(--bit)"><use href="#bit"/></svg>
+  </div>
+  <button class="btn btn-purple" id="confettiBtn">🎉 Comemorar</button>
+</section>
+
+<section class="slide" data-title="Obrigado!" data-section="final">
+  <div class="thanks">
+    <svg class="bit-xl bob" style="color:var(--bit)"><use href="#bit"/></svg>
+    <h2>Obrigado por participar! 💜</h2>
+    <p class="lead">Hoje você aprendeu a dar ordens para o computador e criou um jogo. Agora você é um(a) <b>programador(a)</b>!</p>
+    <div class="card ideas">
+      <h3>Ideias para o seu próximo projeto</h3>
+      <div class="idea-row"><span>🐟 Jogo de pegar peixes</span><span>🎵 Instrumento musical</span><span>📖 História animada</span><span>🚀 Nave desviando de meteoros</span></div>
+    </div>
+    <p class="team" id="team"></p>
+  </div>
+</section>
+
+  </main>
+
+  <!-- ===== NAVEGAÇÃO ===== -->
+  <footer class="navbar">
+    <button class="nav-btn prev" id="prevBtn" aria-label="Voltar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M12 19l-7-7 7-7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Voltar</span>
+    </button>
+    <div class="nav-mid">
+      <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+      <button class="counter" id="counter" title="Ir para uma tela">1 / 1</button>
+    </div>
+    <button class="nav-btn next" id="nextBtn" aria-label="Avançar">
+      <span>Avançar</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </footer>
+</div>
+
+<!-- ===== MENU DO PROFESSOR ===== -->
+<div class="overlay" id="menu" hidden>
+  <div class="menu card">
+    <div class="menu-head">
+      <h3>Menu do professor</h3>
+      <button class="icon-btn" id="menuClose" aria-label="Fechar">✕</button>
+    </div>
+    <p class="muted small">Clique em uma tela para ir direto para ela. Atalhos: <kbd>←</kbd> <kbd>→</kbd> navegam, <kbd>F</kbd> tela cheia, <kbd>M</kbd> abre este menu.</p>
+    <ol class="menu-list" id="menuList"></ol>
+    <div class="menu-actions">
+      <label class="switch"><input type="checkbox" id="answersToggle"> Mostrar botões de resposta</label>
+      <button class="btn btn-ghost" id="resetBtn">🧹 Novo aluno (apagar nome e conquistas)</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script src="vendor/scratchblocks.min.js"></script>
+<script src="vendor/translations-all.js"></script>
+<script src="js/config.js"></script>
+<script src="js/games.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
